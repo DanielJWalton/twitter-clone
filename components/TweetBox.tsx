@@ -37,7 +37,7 @@ function TweetBox({ setTweets }: Props) {
       image: image,
     }
 
-    const result = await fetch(`/api/addTweet`, {
+    const result = await fetch(`/api/addTweets`, {
       body: JSON.stringify(tweetInfo),
       method: 'POST',
     })

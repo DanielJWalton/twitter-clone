@@ -9,6 +9,7 @@
     "@heroicons/react": "^1.0.6",
     "@portabletext/react": "^1.0.6",
     "@sanity/image-url": "^1.0.1",
+    "@types/react-icons": "^3.0.0",
     "add": "^2.0.6",
     "data-urls": "^3.0.2",
     "next": "latest",

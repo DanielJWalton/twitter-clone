@@ -5,13 +5,13 @@ export default {
   fields: [
     {
       name: 'text',
-      title: 'Text in tweet',
+      title: 'Text in the Tweet',
       type: 'string',
     },
     {
       name: 'blockTweet',
       title: 'Block Tweet',
-      description: 'ADMIN Controls: Toggle if Tweet is deemed inappropriate',
+      description: 'Admin controls: Toggle if tweet is deemed inappropriate',
       type: 'boolean',
     },
     {
@@ -21,7 +21,7 @@ export default {
     },
     {
       name: 'profileImg',
-      title: 'Profile Image',
+      title: 'Progile Image',
       type: 'string',
     },
     {
@@ -30,4 +30,6 @@ export default {
       type: 'string',
     },
   ],
+
+
 }
