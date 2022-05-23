@@ -17,11 +17,13 @@ interface Props {
   tweet: Tweet
 }
 
-function Tweet({ tweet }: Props) {
-  const [commentBoxVisible, setCommentBoxVisible] = useState<boolean>(false)
-  const [input, setInput] = useState<string>('')
+const Tweet = ({
+  tweet: { text, username, profileImg, image },
+  tweet,
+}: Props) => {
   const [comments, setComments] = useState<Comment[]>([])
-
+  const [commentBoxVisible, setCommentBoxVisible] = useState<boolean>(false)
+  const [comment, setComment] = useState<string>('')
   const { data: session } = useSession()
 
   const refreshComments = async () => {
@@ -33,32 +35,42 @@ function Tweet({ tweet }: Props) {
     refreshComments()
   }, [])
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-
-    const commentToast = toast.loading('Posting Comment...')
-
-    // Comment logic
-    const comment: CommentBody = {
-      comment: input,
-      tweetId: tweet._id,
+  async function postComments() {
+    const commentBody: CommentBody = {
+      comment: comment,
       username: session?.user?.name || 'Unknown User',
       profileImg: session?.user?.image || 'https://links.papareact.com/gll',
+      tweetId: tweet._id,
     }
 
-    const result = await fetch(`/api/addComments`, {
-      body: JSON.stringify(comment),
+    const result = await fetch(`api/addComment`, {
+      body: JSON.stringify(commentBody),
       method: 'POST',
     })
 
-    console.log('WOOHOO we made it', result)
-    toast.success('Comment Posted!', {
-      id: commentToast,
-    })
+    const json = await result.json()
 
-    setInput('')
+    const newComments = await fetchComments(tweet._id)
+    setComments(newComments)
+    toast.success('Comment Posted!')
+    return json
+  }
+
+  function handleSubmit(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
+    e.preventDefault()
+    postComments()
+    setComment('')
     setCommentBoxVisible(false)
-    refreshComments()
+  }
+
+  function truncateString(str: string, num: number) {
+    // If the length of str is less than or equal to num
+    // just return str--don't truncate it.
+    if (str.length <= num) {
+      return str
+    }
+    // Return str truncated with '...' concatenated to the end of str.
+    return str.slice(0, num) + '...'
   }
 
   return (

@@ -1,13 +1,12 @@
-
 import type { NextPage, GetServerSideProps } from 'next'
 import Head from 'next/head'
 import Feed from '../components/Feed'
-import { Toaster } from 'react-hot-toast'
 import Sidebar from '../components/Sidebar'
-import Widgets from '../components/Widgets'
 import { Tweet } from '../typings'
 import { fetchTweets } from '../utils/fetchTweets'
+import { Toaster } from 'react-hot-toast'
 import { useSession, signIn, signOut, getSession } from 'next-auth/react'
+import Widgets from '../components/Widgets'
 
 interface Props {
   tweets: Tweet[]
@@ -17,9 +16,13 @@ const Home = ({ tweets }: Props) => {
   return (
     <div className="mx-auto max-h-screen overflow-hidden lg:max-w-6xl">
       <Head>
-        <title>Twitter 2.0</title>
+        <title>Twitter Clone</title>
+        <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Toaster />
+
+      <div>
+        <Toaster />
+      </div>
 
       <main className="grid grid-cols-9">
         <Sidebar />
@@ -45,4 +48,3 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     },
   }
 }
-
