@@ -7,8 +7,6 @@ import schemaTypes from 'all:part:@sanity/base/schema-type'
 // We import object and document schemas
 import tweet from './tweet'
 import comment from './comment'
-import message from './message'
-import reply from './reply'
 
 // Then we give our schema to the builder and provide the result to Sanity
 export default createSchema({
@@ -16,5 +14,10 @@ export default createSchema({
   name: 'default',
   // Then proceed to concatenate our document type
   // to the ones provided by any plugins that are installed
-  types: schemaTypes.concat([tweet, comment, message, reply]),
+  types: schemaTypes.concat([
+    // The following are document types which will appear
+    // in the studio.
+    tweet,
+    comment,
+  ]),
 })

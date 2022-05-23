@@ -1,5 +1,6 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next'
+import { text } from 'stream/consumers'
 import { CommentBody } from '../../typings'
 
 type Data = {
@@ -10,20 +11,20 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
-  const comment: CommentBody = JSON.parse(req.body)
+  const data: CommentBody = JSON.parse(req.body)
 
   const mutations = {
     mutations: [
       {
         create: {
           _type: 'comment',
-          comment: comment.comment,
-          username: comment.username,
-          profileImg: comment.profileImg,
+          comment: data.comment,
+          username: data.username,
           tweet: {
             _type: 'reference',
-            _ref: comment.tweetId,
+            _ref: data.tweetId,
           },
+          profileImg: data.profileImg,
         },
       },
     ],
@@ -33,13 +34,14 @@ export default async function handler(
 
   const result = await fetch(apiEndpoint, {
     headers: {
-      'content-type': 'application/json',
+      'Content-Type': 'application/json',
       Authorization: `Bearer ${process.env.SANITY_API_TOKEN}`,
     },
     body: JSON.stringify(mutations),
     method: 'POST',
   })
+
   const json = await result.json()
 
-  res.status(200).json({ message: 'Done!' })
+  res.status(200).json({ message: 'Comment Posted' })
 }
