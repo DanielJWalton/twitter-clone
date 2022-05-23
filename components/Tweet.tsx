@@ -76,15 +76,11 @@ const Tweet = ({
     <div className="flex flex-col space-x-3 border-y border-gray-100 p-5">
       <div className="flex space-x-3">
         <div className="relative h-10 w-10 flex-shrink-0">
-          <Image
-            src={`${
-              process.env.NEXT_PUBLIC_BASE_URL
-            }/api/imageproxy?url=${encodeURIComponent(profileImg)}`}
-            alt="profile image"
-            objectFit="cover"
-            layout="fill"
-            className="rounded-full"
-          />
+        <img
+          className="h-10 w-10 rounded-full object-cover"
+          src={tweet.profileImg || 'https://links.papareact.com/gll'}
+          alt=""
+        />
         </div>
         <div className="w-full">
           <div className="flex items-center space-x-1">
