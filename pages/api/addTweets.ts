@@ -1,5 +1,6 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next'
+import { text } from 'stream/consumers'
 import { TweetBody } from '../../typings'
 
 type Data = {
@@ -31,13 +32,14 @@ export default async function handler(
 
   const result = await fetch(apiEndpoint, {
     headers: {
-      'content-type': 'application/json',
+      'Content-Type': 'application/json',
       Authorization: `Bearer ${process.env.SANITY_API_TOKEN}`,
     },
     body: JSON.stringify(mutations),
     method: 'POST',
   })
+
   const json = await result.json()
 
-  res.status(200).json({ message: 'Added!' })
+  res.status(200).json({ message: 'Tweet Posted' })
 }
