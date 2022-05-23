@@ -18,16 +18,20 @@ import toast from 'react-hot-toast'
 import { Tweet, TweetBody } from '../typings'
 import { fetchTweets } from '../utils/fetchTweets'
 
+
+
 interface Props {
   setTweets: Dispatch<SetStateAction<Tweet[]>>
+  setIsFetching: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-function TweetBox({ setTweets }: Props) {
+const TweetBox = ({ setTweets, setIsFetching }: Props) => {
+  const { data: session } = useSession()
   const [input, setInput] = useState<string>('')
   const [image, setImage] = useState<string>('')
-  const imageInputRef = useRef<HTMLInputElement>(null)
   const [imageUrlBoxIsOpen, setImageUrlBoxIsOpen] = useState<boolean>(false)
-  const { data: session } = useSession()
+  const [imageUrlInvalid, setImageUrlInvalid] = useState<boolean>(false)
+  const imageInputRef = useRef<HTMLInputElement>(null)
 
   async function postTweet() {
     const tweetInfo: TweetBody = {
@@ -46,23 +50,18 @@ function TweetBox({ setTweets }: Props) {
 
     const newTweets = await fetchTweets()
     setTweets(newTweets)
-
-    toast('Tweet Posted!', {
-      icon: '🚀',
-    })
+    toast.success('Tweet Posted!')
     return json
   }
 
-  const handleSubmit = (
-    e: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>
-  ) => {
+  function handleSubmit(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
     e.preventDefault()
-
+    setIsFetching(true)
     postTweet()
-
     setInput('')
     setImage('')
     setImageUrlBoxIsOpen(false)
+    setIsFetching(false)
   }
 
   const addImageToTweet = (

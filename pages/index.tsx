@@ -1,11 +1,13 @@
-import type { GetServerSideProps } from 'next'
+
+import type { NextPage, GetServerSideProps } from 'next'
 import Head from 'next/head'
-import { Toaster } from 'react-hot-toast'
 import Feed from '../components/Feed'
+import { Toaster } from 'react-hot-toast'
 import Sidebar from '../components/Sidebar'
 import Widgets from '../components/Widgets'
 import { Tweet } from '../typings'
 import { fetchTweets } from '../utils/fetchTweets'
+import { useSession, signIn, signOut, getSession } from 'next-auth/react'
 
 interface Props {
   tweets: Tweet[]
@@ -33,11 +35,14 @@ const Home = ({ tweets }: Props) => {
 export default Home
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const tweets: Tweet[] = await fetchTweets()
+  const tweets = await fetchTweets()
+  const session = await getSession(context)
 
   return {
     props: {
       tweets,
+      session,
     },
   }
 }
+
