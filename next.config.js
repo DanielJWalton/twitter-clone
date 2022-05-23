@@ -7,7 +7,8 @@ module.exports = {
       'lh3.googleusercontent.com',
       'pbs.twimg.com',
       'localhost',
-      
+      'birdclone300.vercel.app',
+      'birdclonethreehundred-mcqroq8pt-danieljwalton.vercel.app',
       'danw.me',
       'danw.tech',
     ],

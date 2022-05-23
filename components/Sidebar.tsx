@@ -1,40 +1,80 @@
+import React, { useState } from 'react'
 import SidebarRow from './SidebarRow'
 import {
   BellIcon,
-  HashtagIcon,
-  BookmarkIcon,
-  CollectionIcon,
-  DotsCircleHorizontalIcon,
-  MailIcon,
-  UserIcon,
   HomeIcon,
+  UserIcon,
+  MailIcon,
+  CollectionIcon,
+  BookmarkIcon,
+  HashtagIcon,
+  DotsCircleHorizontalIcon,
 } from '@heroicons/react/outline'
 import { signIn, signOut, useSession } from 'next-auth/react'
+import { useRouter } from 'next/router'
+import { HiOutlineRefresh } from 'react-icons/hi'
+import { Tweet } from '../typings'
+import toast from 'react-hot-toast'
+import { fetchTweets } from '../utils/fetchTweets'
 
-function Sidebar() {
+
+interface Props {
+  tweets: Tweet[]
+}
+
+const Sidebar =({tweets: tweetsProp}: Props) =>{
+  const [tweets, setTweets] = useState<Tweet[]>(tweetsProp)
+  const [isFetching, setIsFetching] = useState(false)
+  const handleRefresh = async () => {
+    setIsFetching(true)
+    const refreshToast = toast.loading('Refreshing...')
+    const tweets = await fetchTweets()
+    setTweets(tweets)
+    setIsFetching(false)
+
+    toast.success('Feed Updated!', {
+      id: refreshToast,
+    })
+  }
   const { data: session } = useSession()
-
   return (
-    <div className="col-span-2 flex flex-col items-center px-4 md:items-start">
-      <img src="https://links.papareact.com/drq" className="m-3 h-10 w-10" />
-      <SidebarRow Icon={HomeIcon} title="Home" />
-      <SidebarRow Icon={HashtagIcon} title="Explore" />
-      <SidebarRow Icon={BellIcon} title="Notifications" />
-      <SidebarRow Icon={MailIcon} title="Messages" />
-      <SidebarRow Icon={BookmarkIcon} title="Bookmarks" />
-      <SidebarRow Icon={CollectionIcon} title="Lists" />
-      <SidebarRow
-        Icon={UserIcon}
-        title={session ? 'Sign Out' : 'Sign In'}
-        onClick={session ? signOut : signIn}
+    <div className="col-span-2   mx-auto hidden flex-col items-center px-4 sm:col-span-1 md:col-span-2 md:inline-flex md:items-start">
+      <img
+        src="https://cdn.sanity.io/images/mrfd4see/production/ec2fea28c4596ca89f3d6565149ad4451512feb3-1034x851.png"
+        className="m-3 h-10 w-10 object-contain "
       />
-      <SidebarRow Icon={DotsCircleHorizontalIcon} title="More" />
+      <SidebarRow title="Home" Icon={HomeIcon} />
+      <SidebarRow title="Refresh" Icon={HiOutlineRefresh}   onClick={handleRefresh}/>
+      <SidebarRow title="Explore" Icon={HashtagIcon} />
+      <SidebarRow title="Notifications" Icon={BellIcon} />
+      <SidebarRow title="Messages" Icon={MailIcon} />
+      <SidebarRow title="Bookmarks" Icon={BookmarkIcon} />
+      <SidebarRow title="Lists" Icon={CollectionIcon} />
+      <SidebarRow
+        onClick={session ? signOut : signIn}
+        title={session ? 'Sign Out' : 'Sign In'}
+        Icon={UserIcon}
+      />
+      <SidebarRow title="More" Icon={DotsCircleHorizontalIcon} />
 
-      {session && (
-        <button className="mt-4 w-full rounded-full bg-twitter p-4 text-sm font-bold text-white sm:text-base">
-          Tweet
-        </button>
-      )}
+      {/* User */}
+      <div className="flex">
+        <img
+          className="h-10 rounded-full"
+          src={session?.user?.image || 'https://links.papareact.com/gll'}
+        />
+        <div className="mx-2 flex flex-col">
+          <p className=" font-bold text-white ">
+            {session?.user?.name || 'Sign In'}
+          </p>
+
+          <p className=" text-sm text-gray-500">
+            @
+            {session?.user?.name?.replace(/\s+/g, '').toLowerCase() ||
+              'pleaseSignIn'}
+          </p>
+        </div>
+      </div>
     </div>
   )
 }

@@ -25,28 +25,26 @@ const Feed = ({ tweets: tweetsProp }: Props) => {
     })
   }
   return (
-    <div className="col-span-7 max-h-screen overflow-scroll  border-x scrollbar-hide lg:col-span-5">
-      <div className="flex items-center justify-between">
-        <h1 className="p-5 pb-0 text-xl font-bold">Home</h1>
-        <HiOutlineRefresh
-            onClick={handleRefresh}
-            className={`mr-5 mt-5 h-8 w-8 cursor-pointer text-twitter transition-all duration-500 ease-out hover:rotate-180 active:scale-125 ${
-              isFetching ? 'animate-spin' : 'animate-none'
-            }`}
-          />
-      </div>
+    <div className="col-span-11 max-h-screen  overflow-y-scroll scroll-smooth border-x border-[#38444d] md:col-span-7  lg:col-span-5 scrollbar-hide">
+    {/* <div className="sticky top-0 twit-dark z-50 flex items-center justify-between   ">
+      
+      <h1 className="p-3 pb-0 text-xl font-bold text-white">Home</h1>
+      <HiOutlineRefresh
+        onClick={handleRefresh}
+        className="mr-5 mt-5 h-8 w-8 cursor-pointer text-white transition-all duration-500 ease-out hover:rotate-180 hover:text-twitter active:scale-125"
+      />
+    </div> */}
 
-      <div className="sticky top-0 z-10 bg-white shadow-sm">
-      <TweetBox setIsFetching={setIsFetching} setTweets={setTweets} />
-      </div>
-
-      {/* Feed */}
-      <div>
-        {tweets.map((tweet) => (
-          <TweetComponent key={tweet._id} tweet={tweet} />
-        ))}
-      </div>
+    <div className="sticky top-0 z-30  ">
+      <TweetBox setTweets={setTweets} setIsFetching={setIsFetching}/>
     </div>
+    {/* feed */}
+    <div>
+      {tweets.map((tweet) => (
+        <TweetComponent key={tweet._id} tweet={tweet} />
+      ))}
+    </div>
+  </div>
   )
 }
 

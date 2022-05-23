@@ -73,7 +73,7 @@ const Tweet = ({
     return str.slice(0, num) + '...'
   }
   return (
-    <div className="flex flex-col space-x-3 border-y border-gray-100 p-5">
+    <div className="flex twit-dark text-white flex-col space-x-3 border-y border-gray-600 p-5">
       <div className="flex space-x-3">
         <div className="relative h-10 w-10 flex-shrink-0">
         <img
@@ -132,7 +132,7 @@ const Tweet = ({
       </div>
       {/* Comment Box logic */}
       {commentBoxVisible && (
-        <form className="mt-3 flex space-x-3">
+        <form className="mt-3 flex space-x-3 twit-dark">
           <input
             onChange={(e) => setComment(e.target.value)}
             value={comment}
@@ -152,10 +152,10 @@ const Tweet = ({
       )}
 
       {comments?.length > 0 && (
-        <div className="my-2 mt-5 max-h-44 space-y-5 overflow-y-scroll border-t border-gray-100 p-5 scrollbar-hide">
+        <div className="my-2 mt-5 max-h-44 space-y-5 overflow-y-scroll border-t border-gray-600  p-12 scrollbar-hide">
           {comments.map((comment) => (
             <div className="relative flex space-x-2" key={comment._id}>
-              <hr className="absolute top-10 left-5 h-8 border-x bg-twitter/30" />
+              <hr className="absolute top-10 left-5 h-8 border-x border-gray-600 bg-twitter/30" />
 
               <div className="relative mt-2 h-7 w-7 flex-shrink-0">
                 <Image

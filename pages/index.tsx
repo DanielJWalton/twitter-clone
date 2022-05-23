@@ -7,6 +7,7 @@ import { fetchTweets } from '../utils/fetchTweets'
 import { Toaster } from 'react-hot-toast'
 import { useSession, signIn, signOut, getSession } from 'next-auth/react'
 import Widgets from '../components/Widgets'
+import SidebarMobile from '../components/SidebarMobile'
 
 interface Props {
   tweets: Tweet[]
@@ -14,7 +15,7 @@ interface Props {
 
 const Home = ({ tweets }: Props) => {
   return (
-    <div className="mx-auto max-h-screen overflow-hidden lg:max-w-6xl">
+    <div className="mx-auto max-h-screen overflow-hidden lg:max-w-screen twit-dark">
       <Head>
         <title>Twitter Clone</title>
         <link rel="icon" href="/favicon.ico" />
@@ -24,8 +25,13 @@ const Home = ({ tweets }: Props) => {
         <Toaster />
       </div>
 
-      <main className="grid grid-cols-9">
-        <Sidebar />
+      <main className="grid grid-cols-10 twit-dark">
+      
+      <Sidebar />
+      <SidebarMobile />
+
+
+   
 
         <Feed tweets={tweets} />
 

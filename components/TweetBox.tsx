@@ -71,19 +71,19 @@ const TweetBox = ({ setTweets, setIsFetching }: Props) => {
   }
 
   return (
-    <div className="flex space-x-2 p-5">
+    <div className="flex space-x-2 p-2 scroll-none twit-dark text-white border-gray-600">
       <img
         src={session?.user?.image || 'https://links.papareact.com/gll'}
         alt=""
         className="mt-4 h-14 w-14 rounded-full"
       />
 
-      <div className="flex flex-1 items-center pl-2">
+      <div className="flex flex-1 items-center twit-dark pl-2">
         <form className="flex flex-1 flex-col">
           <input
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            className="h-24 w-full text-xl outline-none placeholder:text-xl"
+            className="h-24 w-full twit-dark text-xl outline-none placeholder:text-xl"
             type="text"
             placeholder={session ? "What's Happening?" : 'Sign in to Tweet...'}
           />
