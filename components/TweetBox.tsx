@@ -5,26 +5,18 @@ import {
   PhotographIcon,
   SearchCircleIcon,
 } from '@heroicons/react/outline'
+import React, { useRef, useState } from 'react'
+
 import { useSession } from 'next-auth/react'
-import {
-  Dispatch,
-  FormEvent,
-  MouseEvent,
-  SetStateAction,
-  useRef,
-  useState,
-} from 'react'
-import toast from 'react-hot-toast'
 import { Tweet, TweetBody } from '../typings'
 import { fetchTweets } from '../utils/fetchTweets'
-
+import { toast } from 'react-hot-toast'
 
 
 interface Props {
-  setTweets: Dispatch<SetStateAction<Tweet[]>>
+  setTweets: React.Dispatch<React.SetStateAction<Tweet[]>>
   setIsFetching: React.Dispatch<React.SetStateAction<boolean>>
 }
-
 const TweetBox = ({ setTweets, setIsFetching }: Props) => {
   const { data: session } = useSession()
   const [input, setInput] = useState<string>('')
@@ -54,7 +46,7 @@ const TweetBox = ({ setTweets, setIsFetching }: Props) => {
     return json
   }
 
-  function handleSubmit(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
+  const handleSubmit = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault()
     setIsFetching(true)
     postTweet()
@@ -63,16 +55,17 @@ const TweetBox = ({ setTweets, setIsFetching }: Props) => {
     setImageUrlBoxIsOpen(false)
     setIsFetching(false)
   }
-
-  const addImageToTweet = (
-    e: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>
-  ) => {
+  const addImageToTweet = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault()
     if (!imageInputRef.current?.value) return
-
-    setImage(imageInputRef.current.value)
-    imageInputRef.current.value = ''
-    setImageUrlBoxIsOpen(false)
+    if (imageInputRef.current.value.slice(0, 8) !== 'https://') {
+      setImageUrlInvalid(true)
+    } else {
+      setImage(imageInputRef.current.value)
+      imageInputRef.current.value = ''
+      setImageUrlInvalid(false)
+      setImageUrlBoxIsOpen(false)
+    }
   }
 
   return (
