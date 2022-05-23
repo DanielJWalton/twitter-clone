@@ -8,6 +8,8 @@ module.exports = {
       'pbs.twimg.com',
       'localhost',
       'twitter-clone-herdeybayor.vercel.app',
+      'danw.me',
+      'danw.tech',
     ],
   },
 }
