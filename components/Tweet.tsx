@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react'
 import { Comment, CommentBody, Tweet } from '../typings'
 import TimeAgo from 'react-timeago'
@@ -11,7 +10,7 @@ import {
 import { useSession } from 'next-auth/react'
 import toast from 'react-hot-toast'
 import { fetchComments } from '../utils/fetchComments'
-import Image from 'next/image'
+
 interface Props {
   tweet: Tweet
 }
@@ -45,7 +44,7 @@ function Tweet({ tweet }: Props) {
       profileImg: session?.user?.image || 'https://links.papareact.com/gll',
     }
 
-    const result = await fetch(`/api/addComments`, {
+    const result = await fetch(`/api/addComment`, {
       body: JSON.stringify(comment),
       method: 'POST',
     })
@@ -59,49 +58,47 @@ function Tweet({ tweet }: Props) {
     setCommentBoxVisible(false)
     refreshComments()
   }
+
   return (
-    <div className="flex twit-dark text-white flex-col space-x-3 border-y border-gray-600 p-5">
+    <div
+      key={tweet._id}
+      className="flex flex-col space-x-3 border-y border-gray-100 p-5"
+    >
       <div className="flex space-x-3">
-        <div className="relative h-10 w-10 flex-shrink-0">
         <img
           className="h-10 w-10 rounded-full object-cover"
           src={tweet.profileImg || 'https://links.papareact.com/gll'}
           alt=""
         />
-        </div>
-        <div className="w-full">
+
+        <div>
           <div className="flex items-center space-x-1">
-            <p className="mr-1 text-sm font-bold sm:text-base">
-              {truncateString(username, 10)}
-            </p>
+            <p className="mr-1 font-bold">{tweet.username}</p>
             <p className="hidden text-sm text-gray-500 sm:inline">
-              @{username.replace(/\s+/g, '').toLowerCase()} .
+              @{tweet.username.replace(/\s+/g, '').toLowerCase()} ·
             </p>
+
             <TimeAgo
               className="text-sm text-gray-500"
               date={tweet._createdAt}
             />
           </div>
 
-          <p className="pt-1">{text}</p>
-          {image && (
-            <div className="relative m-5 ml-0 mb-1 aspect-auto h-44 shadow-sm">
-              <Image
-                src={`${
-                  process.env.NEXT_PUBLIC_BASE_URL
-                }/api/imageproxy?url=${encodeURIComponent(image)}`}
-                alt="tweet image"
-                objectFit="contain"
-                layout="fill"
-              />
-            </div>
+          <p className="pt-1">{tweet.text}</p>
+
+          {tweet.image && (
+            <img
+              src={tweet.image}
+              className="m-5 ml-0 mb-1 max-h-60  rounded-lg object-cover shadow-sm"
+              alt=""
+            />
           )}
         </div>
       </div>
 
       <div className="mt-5 flex justify-between">
         <div
-          onClick={() => session && setCommentBoxVisible(!commentBoxVisible)}
+          onClick={(e) => session && setCommentBoxVisible(!commentBoxVisible)}
           className="flex cursor-pointer items-center space-x-3 text-gray-400"
         >
           <ChatAlt2Icon className="h-5 w-5" />
@@ -117,21 +114,20 @@ function Tweet({ tweet }: Props) {
           <UploadIcon className="h-5 w-5" />
         </div>
       </div>
-      {/* Comment Box logic */}
+
       {commentBoxVisible && (
-        <form className="mt-3 flex space-x-3 twit-dark">
+        <form className="mt-3 flex space-x-3" onSubmit={handleSubmit}>
           <input
-            onChange={(e) => setComment(e.target.value)}
-            value={comment}
-            className="flex-1 rounded-lg bg-gray-100 p-2 text-xs outline-none sm:text-base"
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            className="flex-1 rounded-lg bg-gray-100 p-2 outline-none"
             type="text"
             placeholder="Write a comment..."
           />
           <button
+            disabled={!input}
+            className="text-twitter disabled:text-gray-200"
             type="submit"
-            onClick={handleSubmit}
-            className="text-twitter disabled:cursor-not-allowed disabled:text-gray-200"
-            disabled={!comment}
           >
             Post
           </button>
@@ -139,33 +135,22 @@ function Tweet({ tweet }: Props) {
       )}
 
       {comments?.length > 0 && (
-        <div className="my-2 mt-5 max-h-44 space-y-5 overflow-y-scroll border-t border-gray-600  p-12 scrollbar-hide">
+        <div className="my-2 mt-5 max-h-44 space-y-5 overflow-y-scroll border-t border-gray-100 p-5">
           {comments.map((comment) => (
-            <div className="relative flex space-x-2" key={comment._id}>
-              <hr className="absolute top-10 left-5 h-8 border-x border-gray-600 bg-twitter/30" />
-
-              <div className="relative mt-2 h-7 w-7 flex-shrink-0">
-                <Image
-                  src={`${
-                    process.env.NEXT_PUBLIC_BASE_URL
-                  }/api/imageproxy?url=${encodeURIComponent(
-                    comment.profileImg
-                  )}`}
-                  alt="profile image"
-                  objectFit="cover"
-                  layout="fill"
-                  className="rounded-full"
-                />
-              </div>
-
+            <div key={comment._id} className="relative flex space-x-2">
+              <hr className="absolute left-5 top-10 h-8 border-x border-twitter/30" />
+              <img
+                src={comment.profileImg}
+                className="mt-2 h-7 w-7 rounded-full object-cover"
+                alt=""
+              />
               <div>
                 <div className="flex items-center space-x-1">
-                  <p className="mr-1 font-bold">
-                    {truncateString(comment.username, 10)}
+                  <p className="mr-1 font-bold">{comment.username}</p>
+                  <p className="hidden text-sm text-gray-500 lg:inline">
+                    @{comment.username.replace(/\s+/g, '').toLowerCase()} ·
                   </p>
-                  <p className="hidden text-sm text-gray-500 sm:inline">
-                    @{comment.username.replace(/\s+/g, '').toLowerCase()} .
-                  </p>
+
                   <TimeAgo
                     className="text-sm text-gray-500"
                     date={comment._createdAt}
