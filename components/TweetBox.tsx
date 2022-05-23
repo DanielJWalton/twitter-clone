@@ -25,16 +25,17 @@ const TweetBox = ({ setTweets, setIsFetching }: Props) => {
   const [imageUrlInvalid, setImageUrlInvalid] = useState<boolean>(false)
   const imageInputRef = useRef<HTMLInputElement>(null)
 
+
   async function postTweet() {
-    const tweetInfo: TweetBody = {
+    const tweetBody: TweetBody = {
       text: input,
       username: session?.user?.name || 'Unknown User',
       profileImg: session?.user?.image || 'https://links.papareact.com/gll',
       image: image,
     }
 
-    const result = await fetch(`/api/addTweets`, {
-      body: JSON.stringify(tweetInfo),
+    const result = await fetch(`api/addTweets`, {
+      body: JSON.stringify(tweetBody),
       method: 'POST',
     })
 
@@ -45,6 +46,7 @@ const TweetBox = ({ setTweets, setIsFetching }: Props) => {
     toast.success('Tweet Posted!')
     return json
   }
+
 
   const handleSubmit = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault()
