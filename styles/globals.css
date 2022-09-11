@@ -14,3 +14,9 @@
 
     }
 } 
+
+@layer nase {
+.mobileB {
+bottom: -1px;
+}
+}

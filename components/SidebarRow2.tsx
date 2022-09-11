@@ -6,7 +6,7 @@ interface Props {
   onClick?: () => {}
 }
 
-function SidebarRow({ Icon, title, onClick }: Props) {
+function SidebarRow2({ Icon, title, onClick }: Props) {
   return (
     <div
       onClick={() => onClick?.()}
@@ -14,11 +14,11 @@ function SidebarRow({ Icon, title, onClick }: Props) {
     >
       <Icon className="h-6 w-6" />
 
-      <p className="hidden text-base text-[#f7f9f9]  lg:inline-flex lg:text-xl">
+      <p className=" text-base text-[#f7f9f9]  lg:inline-flex lg:text-xl">
         {title}
       </p>
     </div>
   )
 }
 
-export default SidebarRow
+export default SidebarRow2

@@ -16,13 +16,12 @@ import { signIn, signOut, useSession } from 'next-auth/react'
 import { Tweet } from '../typings'
 import toast from 'react-hot-toast'
 import { fetchTweets } from '../utils/fetchTweets'
-import SidebarRow2 from './SidebarRow2'
 
 interface Props {
   tweets: Tweet[]
 }
 
-const SidebarMobile = ({ tweets: tweetsProp }: Props) => {
+const SidebarMobile2 = ({ tweets: tweetsProp }: Props) => {
   const [tweets, setTweets] = useState<Tweet[]>(tweetsProp)
   const [isFetching, setIsFetching] = useState(false)
   const handleRefresh = async () => {
@@ -38,28 +37,15 @@ const SidebarMobile = ({ tweets: tweetsProp }: Props) => {
   }
   const { data: session } = useSession()
   return (
-    <div className="sticky bottom-0 mx-auto inline h-14  w-screen border-b border-[#38444d] bg-gray-900 py-1 px-1 text-white scrollbar-hide md:hidden  ">
-      <div className="align-center flex justify-between text-center ">
-        <SidebarRow2
-          onClick={session ? signOut : signIn}
-          title={session ? 'Sign Out' : 'Sign In'}
-          Icon={UserIcon}
-        />
-
-        {session ? (
-          <p className="mx-auto pt-3 text-center">Twitter</p>
-        ) : (
-          <p className="mx-auto pt-3 text-center">Sign In to Tweet</p>
-        )}
-
-        <SidebarRow2
-          title="Refresh"
-          Icon={HiOutlineRefresh}
-          onClick={handleRefresh}
-        />
+    <div className="mobileB - sticky  bottom-0 inline  h-14  w-screen border-b border-[#38444d] bg-gray-900 py-1 px-1 text-white scrollbar-hide md:hidden ">
+      <div className="align-center flex justify-between bg-gray-900 text-center ">
+        <SidebarRow title="Home" Icon={HomeIcon} />
+        <SidebarRow title="Noti" Icon={BellIcon} />
+        <SidebarRow title="BookMark" Icon={BookmarkIcon} />
+        <SidebarRow title="Mail" Icon={MailIcon} />
       </div>
     </div>
   )
 }
 
-export default SidebarMobile
+export default SidebarMobile2
